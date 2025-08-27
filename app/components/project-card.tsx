@@ -8,7 +8,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
     // </Link>
     <Link
       to={`${project.id}`}
-      className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-sm transition hover:shadow-md grid grid-rows-[auto_1fr_auto] gap-3  duration-300 hover:scale-[1.02]"
+      className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-sm transition hover:shadow-md grid grid-rows-[auto_1fr_auto] gap-3 hover:scale-[1.02]"
     >
       <picture>
         <source srcSet={project.image} media="(width >= 600px)" />

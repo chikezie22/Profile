@@ -24,12 +24,7 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: 'Friendly | Web App' },
-    { name: 'description', content: 'Friendly Web Application using React Router 7' },
-  ];
-}
+
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

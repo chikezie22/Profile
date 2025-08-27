@@ -1,10 +1,16 @@
 import ProjectCard from '~/components/project-card';
-import type { Route } from './+types/index';
+import type { Route } from '../projects/+types/index';
 import type { Project } from '~/types';
 import { useMemo, useState } from 'react';
 import Pagination from '~/components/pagination';
+import { AnimatePresence, motion } from 'motion/react';
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Friendly | Projects' }, { name: 'description', content: 'All Projects' }];
+}
 export async function loader({ request }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
-  const res = await fetch('http://localhost:8000/projects');
+ 
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects`);
   const data = await res.json();
   return { projects: data };
 }
@@ -16,7 +22,7 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
       value: category,
     })
   );
-  console.log(categories);
+
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const filteredProjects = useMemo(() => {
@@ -24,7 +30,7 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
       ? projects
       : projects.filter((project) => project.category === selectedCategory);
   }, [categories]);
-  const productsPerPage = 2;
+  const productsPerPage = 5;
   const totalPages = Math.ceil(filteredProjects.length / productsPerPage);
   const indexOfLast = currentPage * productsPerPage;
   const indexOfFirst = indexOfLast - productsPerPage;
@@ -45,7 +51,11 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
             id="category"
           >
             {categories.map((category) => (
-              <option value={category.value} className="bg-gray-800 text-gray-200">
+              <option
+                key={category.label}
+                value={category.value}
+                className="bg-gray-800 text-gray-200"
+              >
                 {category.label}
               </option>
             ))}
@@ -53,11 +63,15 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 w-full h-full">
-        {currentProjects.map((project) => (
-          <ProjectCard project={project} key={project.id} />
-        ))}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div layout className="grid gap-6 sm:grid-cols-2 w-full h-full">
+          {currentProjects.map((project) => (
+            <motion.div key={project.id}>
+              <ProjectCard project={project} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
     </>
   );
