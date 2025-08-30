@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { slug } = params as { slug: string };
+  console.log(slug);
 
   const url = new URL(`/posts-meta.json`, request.url);
   const res = await fetch(url.href);
