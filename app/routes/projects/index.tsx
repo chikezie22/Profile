@@ -9,13 +9,27 @@ export function meta({}: Route.MetaArgs) {
   return [{ title: 'Friendly | Projects' }, { name: 'description', content: 'All Projects' }];
 }
 export async function loader({ request }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
- 
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects`);
-  const data = await res.json();
-  return { projects: data };
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects?populate=*`);
+  const json = await res.json();
+  console.log(json);
+  const projects = json.data.map((item: any) => ({
+    id: item.id,
+    documentId: item.documentId,
+    title: item.title,
+    description: item.description,
+    image: item.image?.url
+      ? `${import.meta.env.VITE_STRAPI_URL}${item.image.url}`
+      : '/images/no-image.png',
+    url: item.url,
+    date: item.date,
+    category: item.category,
+    featured: item.featured,
+  }));
+  return { projects };
 }
 const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
   const { projects } = loaderData as { projects: Project[] };
+  console.log(projects);
   const categories = ['All', ...new Set(projects.map((project) => project.category))].map(
     (category) => ({
       label: category,
@@ -28,7 +42,7 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
   const filteredProjects = useMemo(() => {
     return selectedCategory === 'All'
       ? projects
-      : projects.filter((project) => project.category === selectedCategory);
+      : projects?.filter((project) => project.category === selectedCategory);
   }, [categories]);
   const productsPerPage = 5;
   const totalPages = Math.ceil(filteredProjects.length / productsPerPage);
