@@ -7,7 +7,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
     // </Link>
     <Link
-      to={`${project.id}`}
+      to={`/projects/${project.documentId}`}
       className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-sm transition hover:shadow-md grid grid-rows-[auto_1fr_auto] gap-3 hover:scale-[1.02]"
     >
       <picture>

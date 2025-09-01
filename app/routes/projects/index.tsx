@@ -1,6 +1,6 @@
 import ProjectCard from '~/components/project-card';
 import type { Route } from '../projects/+types/index';
-import type { Project } from '~/types';
+import type { Project, StrapiProject, StrapiResponse } from '~/types';
 import { useMemo, useState } from 'react';
 import Pagination from '~/components/pagination';
 import { AnimatePresence, motion } from 'motion/react';
@@ -10,9 +10,9 @@ export function meta({}: Route.MetaArgs) {
 }
 export async function loader({ request }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/projects?populate=*`);
-  const json = await res.json();
-  console.log(json);
-  const projects = json.data.map((item: any) => ({
+  const json: StrapiResponse<StrapiProject> = await res.json();
+
+  const projects = json.data.map((item) => ({
     id: item.id,
     documentId: item.documentId,
     title: item.title,
