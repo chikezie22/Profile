@@ -1,48 +1,63 @@
+/* @refresh reload */
 import Markdown from 'react-markdown';
-import type { Route } from './+types';
-import { URL } from 'url';
-import type { PostMeta } from '~/types';
+import type { Route } from './+types/details';
+import type { PostMeta, StrapiResponse, StrapiPost } from '~/types';
 import { Link } from 'react-router';
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { slug } = params as { slug: string };
-  console.log(slug);
 
-  const url = new URL(`/posts-meta.json`, request.url);
-  const res = await fetch(url.href);
+  // const url = new URL(`/posts-meta.json`, request.url);
+  // const res = await fetch(url.href);
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/posts/${slug}?populate=*`);
   if (!res.ok) {
     throw new Error('Failed to fetch posts');
   }
-  const postsMeta = await res.json();
+  // const postsMeta = await res.json();
 
-  const post: PostMeta = postsMeta.find((post: PostMeta) => post.slug === slug);
-  console.log(post);
-  if (!post)
+  // const post: PostMeta = postsMeta.find((post: PostMeta) => post.slug === slug);
+  const json = await res.json();
+
+  if (!json)
     throw new Response('Post not found.', {
       status: 404,
     });
   // dynamically import markdown
-  const markdown = await import(`../../posts/${slug}.md?raw`);
+
+  // const markdown = await import(`../../posts/${slug}.md?raw`);
+  const item: StrapiPost = json.data;
+
+  const post: PostMeta = {
+    id: item.id,
+    documentId: item.documentId,
+    body: item.body,
+    slug: item.slug,
+    title: item.title,
+    excerpt: item.excerpt,
+    date: item.date,
+    image: item.image?.url
+      ? `${import.meta.env.VITE_STRAPI_URL}${item.image.url}`
+      : '/images/no-image.png',
+  };
 
   return {
     post,
-    markdown: markdown.default,
+    // markdown: markdown.default,
   };
 }
 type BlogPostDetailsPageProps = {
   loaderData: {
     post: PostMeta;
-    markdown: string;
+    markdown?: string;
   };
 };
 
-const BlogPostDetailsPage = ({ loaderData }: BlogPostDetailsPageProps) => {
-  const { post, markdown } = loaderData;
+const BlogPostDetailsPage = ({ loaderData }: any) => {
+  const { post } = loaderData as { post: PostMeta };
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12 bg-gray-900">
       <h1 className="text-3xl font-bold text-blue-400 mb-2">{post.title}</h1>
-
       <p className="text-sm text-gray-400 mb-6">
         {new Date(post.date).toLocaleDateString('en-US', {
           year: 'numeric',
@@ -50,10 +65,10 @@ const BlogPostDetailsPage = ({ loaderData }: BlogPostDetailsPageProps) => {
           day: '2-digit',
         })}
       </p>
+      <img src={post.image} alt={post.title} className="w-full h-64 object-cover mb-4" />
       <div className="prose prose-invert max-w-none mb-12">
-        <Markdown>{markdown}</Markdown>
+        <Markdown>{post.body}</Markdown>
       </div>
-
       <div className="text-center">
         <Link
           to="/blog"

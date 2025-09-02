@@ -27,7 +27,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
 const ProjectDetials = ({ loaderData }: Route.ComponentProps) => {
   const project = loaderData;
-  console.log(project);
+
   return (
     <>
       {/* Go Back Button */}

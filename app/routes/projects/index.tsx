@@ -1,5 +1,5 @@
 import ProjectCard from '~/components/project-card';
-import type { Route } from '../projects/+types/index';
+import type { Route } from './+types/index';
 import type { Project, StrapiProject, StrapiResponse } from '~/types';
 import { useMemo, useState } from 'react';
 import Pagination from '~/components/pagination';
@@ -29,7 +29,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<{ projects:
 }
 const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
   const { projects } = loaderData as { projects: Project[] };
-  console.log(projects);
+
   const categories = ['All', ...new Set(projects.map((project) => project.category))].map(
     (category) => ({
       label: category,
