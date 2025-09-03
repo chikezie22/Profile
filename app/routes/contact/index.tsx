@@ -1,6 +1,8 @@
 import { Form, useNavigation } from 'react-router';
 import type { Route } from '../contact/+types/index';
-import { p } from 'motion/react-client';
+import { Resend } from 'resend';
+
+const resend = new Resend(import.meta.env.VITE_API_RESEND);
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -20,14 +22,46 @@ export async function action({ request }: Route.ActionArgs) {
   if (Object.keys(errors).length > 0) {
     return { errors };
   }
-  const data = {
-    name,
-    email,
-    subject,
-    message,
-  };
 
-  return { message: 'Form submitted successfully!', data };
+  try {
+    await resend.emails.send({
+      from: `onboarding@resend.dev`,
+      to: 'simonchikezie44@gmail.com',
+      subject: `${subject}`,
+      html: ` <h3>New message from ${name}</h3>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Message:</strong><br/>${message}</p>`,
+    });
+
+    //  send confirmation to user;
+    await resend.emails.send({
+      from: 'Chikezie Simon <onboarding@resend.dev>',
+      to: email, // 👈 user’s email
+      subject: '✅ Thanks for contacting me!',
+      html: `
+        <p>Hi ${name},</p>
+        <p>Thanks for reaching out! I received your message and will get back to you soon.</p>
+        <hr/>
+        <p><strong>Your Message:</strong></p>
+        <p>${message}</p>
+        <br/>
+        <p>Cheers,</p>
+        <p>Chikezie Simon</p>
+      `,
+    });
+    return { message: 'Form submitted successfully!' };
+  } catch (error) {
+    console.error(error);
+    return { errors: { general: 'Failed to send email.' } };
+  }
+
+  // const data = {
+  //   name,
+  //   email,
+  //   subject,
+  //   message,
+  // };
 }
 const ContactPage = ({ actionData }: Route.ComponentProps) => {
   const navigation = useNavigation(); // 👈 get navigation state
@@ -41,7 +75,7 @@ const ContactPage = ({ actionData }: Route.ComponentProps) => {
           {actionData.message}
         </p>
       ) : null}
-      <Form method="post" className="space-y-6">
+      <Form method="post" className="space-y-6" key={actionData?.message}>
         {/* Full Name */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-300">
