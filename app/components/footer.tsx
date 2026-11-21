@@ -18,6 +18,14 @@ const Footer = () => (
             {s.label} ↗
           </a>
         ))}
+        <a
+          href={profile.resume}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors hover:text-fg"
+        >
+          Resume ↗
+        </a>
         <a href={`mailto:${profile.email}`} className="transition-colors hover:text-fg">
           Email
         </a>

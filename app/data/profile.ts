@@ -9,6 +9,7 @@ export const profile = {
   location: 'Jos, Nigeria',
   email: 'simonchikezie44@gmail.com',
   avatar: '/images/profile.jpg',
+  resume: '/chikezie-simon-resume.pdf',
   openToWork: true,
   bio: [
     'Software Engineer with 4+ years of experience building scalable web applications. Strong frontend foundation in React, Next.js and TypeScript, backed by hands-on work in NestJS, Node.js, Prisma and PostgreSQL.',

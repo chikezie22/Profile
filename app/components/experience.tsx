@@ -1,4 +1,4 @@
-import { education, experience } from '~/data/profile';
+import { education, experience, profile } from '~/data/profile';
 import Section from './section';
 
 const Experience = () => (
@@ -50,6 +50,13 @@ const Experience = () => (
         </p>
       </li>
     </ol>
+    <p className="mt-8 text-sm text-muted">
+      The full history is in my{' '}
+      <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="link-dot">
+        resume ↗
+      </a>
+      .
+    </p>
   </Section>
 );
 

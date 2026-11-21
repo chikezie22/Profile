@@ -57,6 +57,14 @@ const Hero = () => {
         >
           Send a message
         </Link>
+        <a
+          href={profile.resume}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center rounded-lg border border-line px-4 py-2.5 text-sm text-soft transition hover:border-muted hover:text-fg"
+        >
+          Resume ↗
+        </a>
         <span className="ml-1 inline-flex items-center gap-1.5 text-sm text-muted">
           <FiMapPin size={14} /> {profile.location}
         </span>
