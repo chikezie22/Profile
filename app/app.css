@@ -29,8 +29,9 @@
   --glow: rgba(139, 140, 248, 0.14);
   /* spider web: luminous silver-indigo silk with dew drops */
   --web: rgba(176, 177, 255, 0.2);
-  --web-dew: #c9caff;
-  --web-filter: drop-shadow(0 0 3px rgba(139, 140, 248, 0.2));
+  --web-art: rgba(176, 177, 255, 0.1);
+  --web-dew: #b8b9ff;
+  --web-filter: none;
   color-scheme: dark;
 }
 
@@ -46,6 +47,7 @@
   --glow: rgba(79, 70, 229, 0.1);
   /* spider web: dark ink sketch with hollow dew rings */
   --web: rgba(24, 24, 27, 0.16);
+  --web-art: rgba(24, 24, 27, 0.08);
   --web-dew: transparent;
   --web-filter: none;
   color-scheme: light;
@@ -113,14 +115,14 @@ body {
 .web {
   filter: var(--web-filter);
   /* fade the web out away from its corner so it never competes with the text */
-  -webkit-mask-image: radial-gradient(115% 115% at 100% 0%, #000 25%, transparent 60%);
-  mask-image: radial-gradient(115% 115% at 100% 0%, #000 25%, transparent 60%);
+  -webkit-mask-image: radial-gradient(115% 115% at 100% 0%, #000 15%, transparent 50%);
+  mask-image: radial-gradient(115% 115% at 100% 0%, #000 15%, transparent 50%);
 }
 
 .web-line {
   fill: none;
-  stroke: var(--web);
-  stroke-width: 0.8;
+  stroke: var(--web-art);
+  stroke-width: 0.6;
   stroke-linecap: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -130,8 +132,9 @@ body {
 
 .web-dew {
   fill: var(--web-dew);
-  stroke: var(--web);
-  stroke-width: 0.7;
+  stroke: var(--web-art);
+  stroke-width: 0.5;
+  opacity: 0.55;
   transform-box: fill-box;
   transform-origin: center;
   animation: dew-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
