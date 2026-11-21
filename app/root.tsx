@@ -12,6 +12,8 @@ import './app.css';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
 import ThemeToggle from './components/theme-toggle';
+import SpiderWeb from './components/spider-web';
+import SmoothScroll from './components/smooth-scroll';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/favicon-64.png' },
@@ -45,6 +47,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <SmoothScroll />
+        <SpiderWeb />
         <ThemeToggle />
         <Navbar />
         <main className="mx-auto max-w-2xl px-6">{children}</main>
