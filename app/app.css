@@ -30,6 +30,7 @@
   /* spider web: luminous silver-indigo silk with dew drops */
   --web: rgba(176, 177, 255, 0.2);
   --web-art: rgba(176, 177, 255, 0.1);
+  --rain: rgba(176, 188, 255, 0.55);
   --web-dew: #b8b9ff;
   --web-filter: none;
   color-scheme: dark;
@@ -48,6 +49,7 @@
   /* spider web: dark ink sketch with hollow dew rings */
   --web: rgba(24, 24, 27, 0.16);
   --web-art: rgba(24, 24, 27, 0.08);
+  --rain: rgba(55, 68, 130, 0.5);
   --web-dew: transparent;
   --web-filter: none;
   color-scheme: light;
@@ -178,6 +180,10 @@ body {
   animation: leg-wiggle 0.35s ease-in-out 2;
 }
 
+.spider-armed .spider-leg {
+  animation: leg-wiggle 0.22s ease-in-out infinite;
+}
+
 @keyframes leg-wiggle {
   50% {
     transform: rotate(8deg);
@@ -222,6 +228,9 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .spider-armed .spider-leg {
+    animation: none;
+  }
   .fade-up {
     animation: none;
   }
