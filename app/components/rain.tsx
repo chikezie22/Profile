@@ -4,7 +4,7 @@ type Drop = { x: number; y: number; len: number; speed: number; alpha: number };
 type Ripple = { x: number; age: number };
 
 const SLANT = 0.16; // sideways pixels per falling pixel (a light wind)
-const MAX_DROPS = 150;
+const MAX_DROPS = 90;
 const RIPPLE_MS = 420;
 
 // A full-screen canvas of light rain. It ramps up when `active` turns on, and when it turns off the
@@ -57,9 +57,9 @@ export default function Rain({ active }: { active: boolean }) {
       drops.push({
         x: Math.random() * (width + 120) - 60,
         y: -20 - Math.random() * 80,
-        len: 10 + Math.random() * 14,
+        len: 9 + Math.random() * 11,
         speed: 650 + Math.random() * 500,
-        alpha: 0.25 + Math.random() * 0.6,
+        alpha: 0.2 + Math.random() * 0.4,
       });
     };
 
@@ -76,7 +76,7 @@ export default function Rain({ active }: { active: boolean }) {
       }
 
       if (activeRef.current) {
-        const target = Math.min(MAX_DROPS, Math.round(width / 9)) * intensity;
+        const target = Math.min(MAX_DROPS, Math.round(width / 15)) * intensity;
         for (let n = Math.min(6, target - drops.length); n > 0; n--) spawn();
       }
 
