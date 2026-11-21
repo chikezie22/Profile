@@ -1,50 +1,38 @@
-import { motion } from 'motion/react';
 import { MdDescription, MdLocationOn, MdMailOutline, MdSend } from 'react-icons/md';
 import { Link } from 'react-router';
 import { profile } from '~/data/profile';
 
-const fade = (delay: number) => ({
-  initial: { opacity: 0, y: 12, filter: 'blur(8px)' },
-  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
-});
+// Entrance animation is pure CSS (see .fade-up) so the hero paints immediately,
+// without waiting for JavaScript to load and hydrate.
+const delay = (s: number) => ({ animationDelay: `${s}s` });
 
 const Hero = () => {
   return (
     <header className="pb-6 pt-14 sm:pt-20">
       {profile.openToWork && (
-        <motion.p
-          {...fade(0)}
-          className="label mb-5 flex items-center gap-2 text-soft"
-        >
+        <p className="label fade-up mb-5 flex items-center gap-2 text-soft" style={delay(0)}>
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
           </span>
           Open to work
-        </motion.p>
+        </p>
       )}
 
-      <motion.h1
-        {...fade(0.08)}
-        className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+      <h1
+        className="fade-up text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+        style={delay(0.05)}
       >
-        Hi, I’m{' '}
-        <img
-          src={profile.avatar}
-          alt=""
-          className="mx-1 inline-block h-9 w-9 -translate-y-0.5 rounded-full object-cover align-middle ring-2 ring-accent/60 sm:h-10 sm:w-10"
-        />{' '}
-        {profile.name}
+        Hi, I’m {profile.name}
         <br />
         <span className="text-soft">{profile.title}</span>
-      </motion.h1>
+      </h1>
 
-      <motion.p {...fade(0.16)} className="mt-4 max-w-md leading-relaxed text-muted">
+      <p className="fade-up mt-4 max-w-md leading-relaxed text-muted" style={delay(0.1)}>
         {profile.tagline}
-      </motion.p>
+      </p>
 
-      <motion.div {...fade(0.24)} className="mt-7 flex flex-wrap items-center gap-3">
+      <div className="fade-up mt-7 flex flex-wrap items-center gap-3" style={delay(0.15)}>
         <a
           href={`mailto:${profile.email}`}
           className="inline-flex items-center gap-2 rounded-lg bg-fg px-4 py-2.5 text-sm font-medium text-bg transition hover:opacity-85 active:scale-[0.98]"
@@ -70,7 +58,7 @@ const Hero = () => {
         <span className="ml-1 inline-flex items-center gap-1.5 text-sm text-muted">
           <MdLocationOn size={16} /> {profile.location}
         </span>
-      </motion.div>
+      </div>
     </header>
   );
 };

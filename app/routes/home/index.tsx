@@ -1,5 +1,5 @@
 import FeaturedProjects from '~/components/feature-project';
-import { apiFetch } from '~/lib/api';
+import { apiJson } from '~/lib/api';
 import type { Route } from './+types/index';
 import type { Project, StrapiPost, StrapiProject, StrapiResponse } from '~/types';
 import { About, Stacks } from '~/components/about-preview';
@@ -8,20 +8,24 @@ import ContactCta from '~/components/contact-cta';
 import type { PostMeta } from '~/types';
 import LatestPosts from '~/components/latest-posts';
 
+// Let the CDN serve the rendered page for a few minutes (and refresh it in the background),
+// so most visitors never wait on the serverless function or the CMS at all.
+export function headers(_: Route.HeadersArgs) {
+  return {
+    'Cache-Control': 'public, max-age=0, must-revalidate',
+    'Netlify-CDN-Cache-Control': 'public, s-maxage=300, stale-while-revalidate=86400',
+  };
+}
+
 export async function loader(_: Route.LoaderArgs): Promise<{ projects: Project[]; posts: PostMeta[] }> {
   // The page is mostly static, so a CMS outage shouldn't take the whole home page down.
   try {
-    const [projectsRes, postsRes] = await Promise.all([
-      apiFetch(`/projects?filters[featured][$eq]=true&populate=*`),
-      apiFetch(`/posts?sort[0]=date:desc&pagination[limit]=3&populate=image`
+    const [projectsJson, postsJson] = await Promise.all([
+      apiJson<StrapiResponse<StrapiProject>>(`/projects?filters[featured][$eq]=true&populate=*`),
+      apiJson<StrapiResponse<StrapiPost>>(
+        `/posts?sort[0]=date:desc&pagination[limit]=3&populate=image`
       ),
     ]);
-
-    if (!projectsRes.ok || !postsRes.ok) {
-      throw new Error('Failed to fetch Projects or Posts');
-    }
-    const projectsJson: StrapiResponse<StrapiProject> = await projectsRes.json();
-    const postsJson: StrapiResponse<StrapiPost> = await postsRes.json();
     return mapData(projectsJson, postsJson);
   } catch (error) {
     console.error(error);

@@ -29,9 +29,9 @@
   --ok: #4ade80;
   --glow: rgba(139, 140, 248, 0.14);
   /* spider web: luminous silver-indigo silk with dew drops */
-  --web: rgba(176, 177, 255, 0.3);
-  --web-dew: #d9daff;
-  --web-filter: drop-shadow(0 0 5px rgba(139, 140, 248, 0.5));
+  --web: rgba(176, 177, 255, 0.5);
+  --web-dew: #e4e5ff;
+  --web-filter: drop-shadow(0 0 7px rgba(139, 140, 248, 0.6));
   color-scheme: dark;
 }
 
@@ -46,7 +46,7 @@
   --ok: #16a34a;
   --glow: rgba(79, 70, 229, 0.1);
   /* spider web: dark ink sketch with hollow dew rings */
-  --web: rgba(24, 24, 27, 0.26);
+  --web: rgba(24, 24, 27, 0.4);
   --web-dew: transparent;
   --web-filter: none;
   color-scheme: light;
@@ -84,16 +84,41 @@ body {
   @apply inline-grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-line bg-card text-accent;
 }
 
+/* ---------- Entrance animations (CSS only, no JS needed to appear) ---------- */
+.reveal {
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.fade-up {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
 /* ---------- Spider web ---------- */
 .web {
   filter: var(--web-filter);
-  animation: web-breathe 9s ease-in-out infinite;
+  /* fade the web out away from its corner so it never competes with the text */
+  -webkit-mask-image: radial-gradient(115% 115% at 100% 0%, #000 38%, transparent 76%);
+  mask-image: radial-gradient(115% 115% at 100% 0%, #000 38%, transparent 76%);
 }
 
 .web-line {
   fill: none;
   stroke: var(--web);
-  stroke-width: 0.9;
+  stroke-width: 1.15;
   stroke-linecap: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -104,7 +129,7 @@ body {
 .web-dew {
   fill: var(--web-dew);
   stroke: var(--web);
-  stroke-width: 0.8;
+  stroke-width: 1;
   transform-box: fill-box;
   transform-origin: center;
   animation: dew-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
@@ -132,16 +157,6 @@ body {
   from {
     transform: scale(0);
     opacity: 0;
-  }
-}
-
-@keyframes web-breathe {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(0.8deg);
   }
 }
 
@@ -202,7 +217,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .web {
+  .fade-up {
     animation: none;
   }
   html {

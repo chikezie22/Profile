@@ -1,25 +1,48 @@
-import { motion } from 'motion/react';
-import type { ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
-// Blur + fade + rise as the block enters the viewport.
+// Fades and lifts content in as it scrolls into view.
+// The server renders it fully visible, so nothing waits on JavaScript to appear. After hydration,
+// only blocks that start below the fold are hidden and then revealed by an IntersectionObserver.
 export default function Reveal({
   children,
   delay = 0,
-  className,
+  className = '',
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Already on screen at load: leave it alone, no flash.
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.92) return;
+
+    setHidden(true);
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHidden(false);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '0px 0px -60px 0px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 14, filter: 'blur(8px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '0px 0px -60px 0px' }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={ref}
+      className={`reveal ${hidden ? 'reveal-hidden' : ''} ${className}`}
+      style={{ transitionDelay: hidden ? '0s' : `${delay}s` }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
