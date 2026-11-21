@@ -1,4 +1,5 @@
 /* @refresh reload */
+import { apiFetch } from '~/lib/api';
 import Markdown from 'react-markdown';
 import type { Route } from './+types/details';
 import type { PostMeta, StrapiResponse, StrapiPost } from '~/types';
@@ -9,7 +10,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
   // const url = new URL(`/posts-meta.json`, request.url);
   // const res = await fetch(url.href);
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/posts/${slug}?populate=*`);
+  const res = await apiFetch(`/posts/${slug}?populate=*`);
   if (!res.ok) {
     throw new Error('Failed to fetch posts');
   }

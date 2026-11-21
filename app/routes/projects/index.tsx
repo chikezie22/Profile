@@ -1,4 +1,5 @@
 import ProjectCard from '~/components/project-card';
+import { apiFetch } from '~/lib/api';
 import type { Route } from './+types/index';
 import type { Project, StrapiProject, StrapiResponse } from '~/types';
 import { useMemo, useState } from 'react';
@@ -9,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
   return [{ title: 'Projects | Chikezie Simon' }, { name: 'description', content: 'All Projects' }];
 }
 export async function loader({ request }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects?populate=*`);
+  const res = await apiFetch(`/projects?populate=*`);
   const json: StrapiResponse<StrapiProject> = await res.json();
 
   const projects = json.data.map((item) => ({

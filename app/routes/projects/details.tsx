@@ -1,9 +1,10 @@
 import { FaArrowLeft } from 'react-icons/fa';
+import { apiFetch } from '~/lib/api';
 import type { Route } from './+types/details';
 import type { StrapiProject, Project } from '~/types';
 import { Link } from 'react-router';
 export async function loader({ request, params }: Route.LoaderArgs) {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/projects/${params.id}?populate=*`);
+  const res = await apiFetch(`/projects/${params.id}?populate=*`);
 
   if (!res.ok) throw new Response(`Project not found`, { status: 404 });
   const data = await res.json();

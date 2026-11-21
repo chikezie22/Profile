@@ -1,4 +1,5 @@
 import type { Route } from './+types/index';
+import { apiFetch } from '~/lib/api';
 import type { PostMeta, StrapiResponse, StrapiPost } from '~/types';
 import PostCard from '~/components/post-card';
 import Pagination from '~/components/pagination';
@@ -9,7 +10,7 @@ export async function loader({ request }: Route.LoaderArgs): Promise<{ posts: Po
   // const url = new URL('/posts-meta.json', request.url);
 
   // const res = await fetch(url.href);
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/posts?populate=image&sort=date:desc`);
+  const res = await apiFetch(`/posts?populate=image&sort=date:desc`);
   if (!res.ok) throw new Error('Failed to fetch posts');
   const json: StrapiResponse<StrapiPost> = await res.json();
 

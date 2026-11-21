@@ -1,4 +1,5 @@
 import FeaturedProjects from '~/components/feature-project';
+import { apiFetch } from '~/lib/api';
 import type { Route } from './+types/index';
 import type { Project, StrapiPost, StrapiProject, StrapiResponse } from '~/types';
 import { About, Stacks } from '~/components/about-preview';
@@ -11,9 +12,8 @@ export async function loader(_: Route.LoaderArgs): Promise<{ projects: Project[]
   // The page is mostly static, so a CMS outage shouldn't take the whole home page down.
   try {
     const [projectsRes, postsRes] = await Promise.all([
-      fetch(`${import.meta.env.VITE_API_URL}/projects?filters[featured][$eq]=true&populate=*`),
-      fetch(
-        `${import.meta.env.VITE_API_URL}/posts?sort[0]=date:desc&pagination[limit]=3&populate=image`
+      apiFetch(`/projects?filters[featured][$eq]=true&populate=*`),
+      apiFetch(`/posts?sort[0]=date:desc&pagination[limit]=3&populate=image`
       ),
     ]);
 
