@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { FiMail, FiMapPin } from 'react-icons/fi';
+import { MdDescription, MdLocationOn, MdMailOutline, MdSend } from 'react-icons/md';
 import { Link } from 'react-router';
 import { profile } from '~/data/profile';
 
@@ -18,8 +18,8 @@ const Hero = () => {
           className="label mb-5 flex items-center gap-2 text-soft"
         >
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
           </span>
           Open to work
         </motion.p>
@@ -33,7 +33,7 @@ const Hero = () => {
         <img
           src={profile.avatar}
           alt=""
-          className="mx-1 inline-block h-9 w-9 -translate-y-0.5 rounded-full object-cover align-middle ring-1 ring-line sm:h-10 sm:w-10"
+          className="mx-1 inline-block h-9 w-9 -translate-y-0.5 rounded-full object-cover align-middle ring-2 ring-accent/60 sm:h-10 sm:w-10"
         />{' '}
         {profile.name}
         <br />
@@ -49,24 +49,26 @@ const Hero = () => {
           href={`mailto:${profile.email}`}
           className="inline-flex items-center gap-2 rounded-lg bg-fg px-4 py-2.5 text-sm font-medium text-bg transition hover:opacity-85 active:scale-[0.98]"
         >
-          <FiMail size={15} /> Email me
+          <MdMailOutline size={17} /> Email me
         </a>
         <Link
           to="/contact"
-          className="inline-flex items-center rounded-lg border border-line px-4 py-2.5 text-sm text-soft transition hover:border-muted hover:text-fg"
+          className="inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2.5 text-sm text-soft transition hover:border-muted hover:text-fg"
         >
+          <MdSend size={15} />
           Send a message
         </Link>
         <a
           href={profile.resume}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center rounded-lg border border-line px-4 py-2.5 text-sm text-soft transition hover:border-muted hover:text-fg"
+          className="inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2.5 text-sm text-soft transition hover:border-muted hover:text-fg"
         >
-          Resume ↗
+          <MdDescription size={16} />
+          Resume
         </a>
         <span className="ml-1 inline-flex items-center gap-1.5 text-sm text-muted">
-          <FiMapPin size={14} /> {profile.location}
+          <MdLocationOn size={16} /> {profile.location}
         </span>
       </motion.div>
     </header>

@@ -1,17 +1,20 @@
 import { education, experience, profile } from '~/data/profile';
+import { MdSchool, MdWorkOutline } from 'react-icons/md';
 import Section from './section';
 
 const Experience = () => (
-  <Section id="experience" label="Experience">
-    <ol className="relative space-y-9 border-l border-line pl-6">
+  <Section id="experience" label="Experience" icon={MdWorkOutline}>
+    <ol className="relative ml-3 space-y-9 border-l border-line pl-7">
       {experience.map((job, i) => (
         <li key={`${job.company}-${job.period}`} className="relative">
           <span
-            className={`absolute -left-[29px] top-1.5 h-2 w-2 rounded-full ring-4 ring-bg ${
-              i === 0 ? 'bg-accent' : 'bg-line'
+            className={`absolute -left-[40px] top-0 grid h-6 w-6 place-items-center rounded-full border ring-4 ring-bg ${
+              i === 0 ? 'border-accent bg-accent text-bg' : 'border-line bg-card text-muted'
             }`}
             aria-hidden
-          />
+          >
+            <MdWorkOutline size={13} />
+          </span>
           <p className="label">{job.period}</p>
           <h3 className="mt-1.5 font-medium text-fg">
             {job.role} <span className="font-normal text-muted">at</span>{' '}
@@ -40,9 +43,11 @@ const Experience = () => (
 
       <li className="relative">
         <span
-          className="absolute -left-[29px] top-1.5 h-2 w-2 rounded-full bg-line ring-4 ring-bg"
+          className="absolute -left-[40px] top-0 grid h-6 w-6 place-items-center rounded-full border border-line bg-card text-muted ring-4 ring-bg"
           aria-hidden
-        />
+        >
+          <MdSchool size={13} />
+        </span>
         <p className="label">{education.period}</p>
         <h3 className="mt-1.5 font-medium text-fg">{education.degree}</h3>
         <p className="mt-0.5 text-sm text-muted">
@@ -53,7 +58,7 @@ const Experience = () => (
     <p className="mt-8 text-sm text-muted">
       The full history is in my{' '}
       <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="link-dot">
-        resume ↗
+        resume
       </a>
       .
     </p>

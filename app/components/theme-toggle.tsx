@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, useAnimationControls } from 'motion/react';
-import { FiMoon, FiSun } from 'react-icons/fi';
+import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
 type Theme = 'dark' | 'light';
 
@@ -34,7 +34,7 @@ export default function ThemeToggle() {
         aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
         className="grid h-8 w-8 cursor-pointer place-items-center rounded-full border border-line bg-fg text-bg shadow-lg transition-transform hover:scale-110"
       >
-        {theme === 'dark' ? <FiMoon size={15} /> : <FiSun size={15} />}
+        {theme === 'dark' ? <MdDarkMode size={17} /> : <MdLightMode size={17} />}
       </button>
     </motion.div>
   );

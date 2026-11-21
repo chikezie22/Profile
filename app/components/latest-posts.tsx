@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import type { PostMeta } from '~/types';
+import { MdEditNote } from 'react-icons/md';
 import Section from './section';
 
 type LatestPostsProps = {
@@ -15,7 +16,7 @@ const LatestPosts = ({ posts, limit = 3 }: LatestPostsProps) => {
   if (latest.length === 0) return null;
 
   return (
-    <Section id="writing" label="Writing">
+    <Section id="writing" label="Writing" icon={MdEditNote}>
       <ul className="divide-y divide-line border-y border-line">
         {latest.map((post) => (
           <li key={post.slug}>

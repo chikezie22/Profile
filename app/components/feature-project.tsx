@@ -1,10 +1,11 @@
 import { Link } from 'react-router';
 import type { Project } from '~/types';
+import { MdArrowOutward, MdFolderOpen } from 'react-icons/md';
 import Section from './section';
 
 const FeaturedProjects = ({ projects }: { projects: Project[] }) => {
   return (
-    <Section id="projects" label="Projects">
+    <Section id="projects" label="Projects" icon={MdFolderOpen}>
       <p className="mb-5 text-soft">A few things I’ve built and shipped.</p>
       {projects.length === 0 ? (
         <p className="text-sm text-muted">Projects are loading soon.</p>
@@ -25,12 +26,11 @@ const FeaturedProjects = ({ projects }: { projects: Project[] }) => {
                   <span className="block truncate font-medium text-fg">{p.title}</span>
                   <span className="block truncate text-sm text-muted">{p.description}</span>
                 </span>
-                <span
-                  className="text-muted transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg"
+                <MdArrowOutward
+                  size={18}
+                  className="text-muted transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
                   aria-hidden
-                >
-                  ↗
-                </span>
+                />
               </Link>
             </li>
           ))}

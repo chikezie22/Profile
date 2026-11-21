@@ -8,7 +8,7 @@ export const profile = {
     'I build scalable web apps across the stack, from polished React interfaces to NestJS APIs and fintech integrations.',
   location: 'Jos, Nigeria',
   email: 'simonchikezie44@gmail.com',
-  avatar: '/images/profile.jpg',
+  avatar: '/images/github-avatar.jpg',
   resume: '/chikezie-simon-resume.pdf',
   openToWork: true,
   bio: [

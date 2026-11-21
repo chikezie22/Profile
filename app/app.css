@@ -14,6 +14,7 @@
   --color-line: var(--line);
   --color-card: var(--card);
   --color-accent: var(--accent);
+  --color-ok: var(--ok);
 }
 
 /* Dark is the default theme; light is opt-in via data-theme="light" */
@@ -24,7 +25,9 @@
   --muted: #7d7d86;
   --line: #1f1f23;
   --card: #131316;
-  --accent: #4ade80;
+  --accent: #8b8cf8;
+  --ok: #4ade80;
+  --glow: rgba(139, 140, 248, 0.14);
   color-scheme: dark;
 }
 
@@ -35,7 +38,9 @@
   --muted: #8a8a93;
   --line: #e7e5e4;
   --card: #ffffff;
-  --accent: #16a34a;
+  --accent: #4f46e5;
+  --ok: #16a34a;
+  --glow: rgba(79, 70, 229, 0.1);
   color-scheme: light;
 }
 
@@ -50,6 +55,26 @@ body {
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+}
+
+/* Soft accent glow behind the top of every page */
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 28rem;
+  background: radial-gradient(60% 100% at 50% 0%, var(--glow), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+body {
+  position: relative;
+}
+
+/* Small rounded icon tile used beside section labels and timeline nodes */
+.icon-chip {
+  @apply inline-grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-line bg-card text-accent;
 }
 
 ::selection {
