@@ -14,6 +14,9 @@ import Footer from './components/footer';
 import ThemeToggle from './components/theme-toggle';
 
 export const links: Route.LinksFunction = () => [
+  { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/favicon-64.png' },
+  { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+  { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
     rel: 'preconnect',
