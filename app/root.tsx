@@ -33,6 +33,14 @@ export const links: Route.LinksFunction = () => [
 
 
 
+// The site's own address, used for absolute URLs in share-preview tags. Serverless adapters
+// often report "http", so force https for anything that isn't local development.
+export function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const local = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+  return { origin: local ? url.origin : `https://${url.host}` };
+}
+
 // Runs before paint so the saved theme never flashes. Dark is the default.
 const themeScript = `try{var t=localStorage.getItem('theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){document.documentElement.dataset.theme='dark'}`;
 

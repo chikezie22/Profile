@@ -1,12 +1,9 @@
 import { Outlet } from 'react-router';
-import { profile } from '~/data/profile';
+import { originFromMatches, seoMeta } from '~/lib/seo';
 import type { Route } from '../layout/+types/main';
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: `${profile.name} — ${profile.title}` },
-    { name: 'description', content: profile.tagline },
-  ];
+export function meta({ matches }: Route.MetaArgs) {
+  return seoMeta(originFromMatches(matches));
 }
 
 const MainLayout = () => {

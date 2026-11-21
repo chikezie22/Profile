@@ -1,13 +1,10 @@
 import { Outlet } from 'react-router';
 import Hero from '~/components/hero';
-import { profile } from '~/data/profile';
+import { originFromMatches, seoMeta } from '~/lib/seo';
 import type { Route } from '../layout/+types/home';
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: `${profile.name} — ${profile.title}` },
-    { name: 'description', content: profile.tagline },
-  ];
+export function meta({ matches }: Route.MetaArgs) {
+  return seoMeta(originFromMatches(matches));
 }
 
 const HomeLayout = () => {
