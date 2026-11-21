@@ -85,8 +85,8 @@ export default function SpiderWeb() {
   return (
     // Hidden below lg: on phones and tablets it would sit behind the text.
     <div key={weave} aria-hidden className="pointer-events-none hidden lg:block">
-      <Web className="fixed right-0 top-0 -z-10 w-[30rem] xl:w-[38rem]" />
-      <Web className="fixed bottom-0 left-0 -z-10 w-64 rotate-180 opacity-70 xl:w-[22rem]" />
+      <Web className="fixed right-0 top-0 -z-10 w-80 xl:w-[26rem]" />
+      <Web className="fixed bottom-0 left-0 -z-10 w-44 rotate-180 opacity-60 xl:w-60" />
     </div>
   );
 }

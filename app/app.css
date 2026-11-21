@@ -3,9 +3,8 @@
 
 @theme {
   --font-sans:
-    'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji';
-  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
 
   --color-bg: var(--bg);
   --color-fg: var(--fg);
@@ -29,9 +28,9 @@
   --ok: #4ade80;
   --glow: rgba(139, 140, 248, 0.14);
   /* spider web: luminous silver-indigo silk with dew drops */
-  --web: rgba(176, 177, 255, 0.5);
-  --web-dew: #e4e5ff;
-  --web-filter: drop-shadow(0 0 7px rgba(139, 140, 248, 0.6));
+  --web: rgba(176, 177, 255, 0.2);
+  --web-dew: #c9caff;
+  --web-filter: drop-shadow(0 0 3px rgba(139, 140, 248, 0.2));
   color-scheme: dark;
 }
 
@@ -46,7 +45,7 @@
   --ok: #16a34a;
   --glow: rgba(79, 70, 229, 0.1);
   /* spider web: dark ink sketch with hollow dew rings */
-  --web: rgba(24, 24, 27, 0.4);
+  --web: rgba(24, 24, 27, 0.16);
   --web-dew: transparent;
   --web-filter: none;
   color-scheme: light;
@@ -55,6 +54,9 @@
 html {
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv11', 'ss03';
 }
 
 body {
@@ -111,14 +113,14 @@ body {
 .web {
   filter: var(--web-filter);
   /* fade the web out away from its corner so it never competes with the text */
-  -webkit-mask-image: radial-gradient(115% 115% at 100% 0%, #000 38%, transparent 76%);
-  mask-image: radial-gradient(115% 115% at 100% 0%, #000 38%, transparent 76%);
+  -webkit-mask-image: radial-gradient(115% 115% at 100% 0%, #000 25%, transparent 60%);
+  mask-image: radial-gradient(115% 115% at 100% 0%, #000 25%, transparent 60%);
 }
 
 .web-line {
   fill: none;
   stroke: var(--web);
-  stroke-width: 1.15;
+  stroke-width: 0.8;
   stroke-linecap: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -129,7 +131,7 @@ body {
 .web-dew {
   fill: var(--web-dew);
   stroke: var(--web);
-  stroke-width: 1;
+  stroke-width: 0.7;
   transform-box: fill-box;
   transform-origin: center;
   animation: dew-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;

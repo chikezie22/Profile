@@ -10,8 +10,8 @@ export const About = () => (
         <p key={p}>{p}</p>
       ))}
     </div>
-    <p className="mt-6 font-serif text-4xl italic leading-none text-fg">{profile.firstName}</p>
-    <p className="mt-1 text-sm text-muted">{profile.name}</p>
+    <p className="mt-6 font-semibold text-fg">{profile.name}</p>
+    <p className="text-sm text-muted">{profile.title}</p>
   </Section>
 );
 

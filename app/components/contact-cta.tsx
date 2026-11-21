@@ -6,7 +6,7 @@ import Section from './section';
 
 const ContactCta = () => (
   <Section id="contact" label="Contact" icon={MdMailOutline}>
-    <p className="font-serif text-3xl italic leading-snug text-fg sm:text-4xl">
+    <p className="text-2xl font-semibold leading-snug tracking-tight text-fg sm:text-3xl">
       Have a project in mind? Let’s build something great.
     </p>
     <div className="mt-6 flex flex-wrap gap-3">

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { motion, useAnimationControls, useReducedMotion } from 'motion/react';
-import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
 type Theme = 'dark' | 'light';
 
@@ -75,9 +74,6 @@ export default function ThemeToggle() {
           className="spider-btn relative cursor-pointer text-fg transition-transform hover:scale-110"
         >
           <Spider />
-          <span className="absolute -bottom-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-fg text-bg">
-            {theme === 'dark' ? <MdDarkMode size={10} /> : <MdLightMode size={10} />}
-          </span>
         </button>
       </motion.div>
     </motion.div>
