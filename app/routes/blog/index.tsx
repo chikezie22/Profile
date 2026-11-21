@@ -47,8 +47,9 @@ const BlogPage = ({ loaderData }: Route.ComponentProps) => {
   const totalPages = Math.ceil(filteredPosts.length / postPerPage);
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 px-6 py-6 bg-gray-900">
-      <h2 className="text-3xl font-bold mb-8 text-white">📝 Blog</h2>
+    <div>
+      <h1 className="text-3xl font-semibold tracking-tight">Blog</h1>
+      <p className="mb-8 mt-2 text-muted">Notes on code, tools and what I’m learning.</p>
       <PostFilter
         searchQuery={searchQuery}
         onSearchChange={(searchQuery) => {
@@ -56,6 +57,7 @@ const BlogPage = ({ loaderData }: Route.ComponentProps) => {
           setCurrentPage(1);
         }}
       />
+      {currentPosts.length === 0 && <p className="text-sm text-muted">No posts found.</p>}
       {currentPosts.map((post: PostMeta) => (
         <PostCard key={post.slug} post={post} />
       ))}

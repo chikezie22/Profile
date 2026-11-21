@@ -5,12 +5,14 @@ type PostFilterProps = {
 
 const PostFilter = ({ searchQuery, onSearchChange }: PostFilterProps) => {
   return (
-    <div className="mb-6">
+    <div className="mb-8">
       <input
-        type="text"
+        type="search"
         value={searchQuery}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Search posts..."
+        aria-label="Search posts"
+        className="w-full rounded-lg border border-line bg-card px-3.5 py-2.5 text-sm text-fg placeholder:text-muted transition-colors focus:border-muted focus:outline-none"
       />
     </div>
   );

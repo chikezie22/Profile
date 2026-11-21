@@ -54,28 +54,27 @@ const BlogPostDetailsPage = ({ loaderData }: any) => {
   const { post } = loaderData as { post: PostMeta };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12 bg-gray-900">
-      <h1 className="text-3xl font-bold text-blue-400 mb-2">{post.title}</h1>
-      <p className="text-sm text-gray-400 mb-6">
+    <article>
+      <Link to="/blog" className="text-sm text-muted transition hover:text-fg">
+        ← Back to posts
+      </Link>
+      <time className="label mt-8 block">
         {new Date(post.date).toLocaleDateString('en-US', {
           year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
+          month: 'long',
+          day: 'numeric',
         })}
-      </p>
-      <img src={post.image} alt={post.title} className="w-full h-64 object-cover mb-4" />
-      <div className="prose prose-invert max-w-none mb-12">
+      </time>
+      <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight">{post.title}</h1>
+      <img
+        src={post.image}
+        alt={post.title}
+        className="mt-6 h-64 w-full rounded-xl object-cover ring-1 ring-line"
+      />
+      <div className="prose prose-theme mt-8 max-w-none">
         <Markdown>{post.body}</Markdown>
       </div>
-      <div className="text-center">
-        <Link
-          to="/blog"
-          className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          ← Go Back to Posts
-        </Link>
-      </div>
-    </div>
+    </article>
   );
 };
 

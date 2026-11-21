@@ -6,7 +6,7 @@ import Pagination from '~/components/pagination';
 import { AnimatePresence, motion } from 'motion/react';
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: 'Friendly | Projects' }, { name: 'description', content: 'All Projects' }];
+  return [{ title: 'Projects | Chikezie Simon' }, { name: 'description', content: 'All Projects' }];
 }
 export async function loader({ request }: Route.LoaderArgs): Promise<{ projects: Project[] }> {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/projects?populate=*`);
@@ -41,7 +41,7 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
     return selectedCategory === 'All'
       ? projects
       : projects?.filter((project) => project.category === selectedCategory);
-  }, [categories]);
+  }, [projects, selectedCategory]);
   const productsPerPage = 5;
   const totalPages = Math.ceil(filteredProjects.length / productsPerPage);
   const indexOfLast = currentPage * productsPerPage;
@@ -50,23 +50,29 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="text-white font-bold mt-3">Project Page</h2>
-        <div className="space-x-3">
-          <label htmlFor="category">Categories</label>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Projects</h1>
+          <p className="mt-2 text-muted">Things I’ve built, shipped and learned from.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <label htmlFor="category" className="label">
+            Category
+          </label>
           <select
-            className="bg-gray-800 border border-gray-600 px-4 py-2.5 rounded-lg text-gray-200 cursor-pointer 
-             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-             hover:border-gray-500 transition-colors duration-200 "
+            className="cursor-pointer rounded-lg border border-line bg-card px-3 py-2 text-sm text-fg transition-colors hover:border-muted focus:outline-none"
             defaultValue={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setCurrentPage(1);
+            }}
             id="category"
           >
             {categories.map((category) => (
               <option
                 key={category.label}
                 value={category.value}
-                className="bg-gray-800 text-gray-200"
+                className="bg-card text-fg"
               >
                 {category.label}
               </option>
@@ -76,7 +82,7 @@ const ProjectPage = ({ loaderData }: Route.ComponentProps) => {
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div layout className="grid gap-6 sm:grid-cols-2 w-full h-full">
+        <motion.div layout className="grid w-full gap-5 sm:grid-cols-2">
           {currentProjects.map((project) => (
             <motion.div key={project.id}>
               <ProjectCard project={project} />

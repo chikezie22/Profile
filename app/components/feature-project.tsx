@@ -1,19 +1,48 @@
+import { Link } from 'react-router';
 import type { Project } from '~/types';
-import ProjectCard from '~/components/project-card';
+import Section from './section';
 
 const FeaturedProjects = ({ projects }: { projects: Project[] }) => {
-  // const featured = projects.filter((p) => p.featured).slice(0, count);
   return (
-    <section>
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
-        🌟 Featured Projects
-      </h2>
-      <div className="grid gap-6 sm:grid-cols-2">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
-    </section>
+    <Section id="projects" label="Projects">
+      <p className="mb-5 text-soft">A few things I’ve built and shipped.</p>
+      {projects.length === 0 ? (
+        <p className="text-sm text-muted">Projects are loading soon.</p>
+      ) : (
+        <ul className="divide-y divide-line border-y border-line">
+          {projects.map((p) => (
+            <li key={p.id}>
+              <Link
+                to={`/projects/${p.documentId}`}
+                className="group flex items-center gap-3 py-3.5"
+              >
+                <img
+                  src={p.image}
+                  alt=""
+                  className="h-9 w-9 shrink-0 rounded-lg object-cover ring-1 ring-line"
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-medium text-fg">{p.title}</span>
+                  <span className="block truncate text-sm text-muted">{p.description}</span>
+                </span>
+                <span
+                  className="text-muted transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg"
+                  aria-hidden
+                >
+                  ↗
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="mt-5 text-sm text-muted">
+        Want to see more?{' '}
+        <Link to="/projects" className="link-dot">
+          View all projects →
+        </Link>
+      </p>
+    </Section>
   );
 };
 

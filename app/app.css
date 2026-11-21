@@ -1,16 +1,102 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
+
 @theme {
   --font-sans:
-    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
+    'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-soft: var(--soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
 }
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+/* Dark is the default theme; light is opt-in via data-theme="light" */
+:root {
+  --bg: #0b0b0c;
+  --fg: #f4f4f5;
+  --soft: #c4c4ca;
+  --muted: #7d7d86;
+  --line: #1f1f23;
+  --card: #131316;
+  --accent: #4ade80;
+  color-scheme: dark;
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+:root[data-theme='light'] {
+  --bg: #fafaf9;
+  --fg: #111113;
+  --soft: #3f3f46;
+  --muted: #8a8a93;
+  --line: #e7e5e4;
+  --card: #ffffff;
+  --accent: #16a34a;
+  color-scheme: light;
+}
+
+html {
+  overflow-x: clip;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  @apply bg-bg text-fg font-sans;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Dotted underline link, used for inline mentions */
+.link-dot {
+  @apply text-fg underline decoration-muted decoration-dotted underline-offset-4 transition-colors hover:decoration-fg;
+}
+
+.label {
+  @apply text-xs font-medium uppercase tracking-[0.14em] text-muted;
+}
+
+/* Blog markdown on both themes */
+.prose-theme {
+  --tw-prose-body: var(--soft);
+  --tw-prose-headings: var(--fg);
+  --tw-prose-links: var(--fg);
+  --tw-prose-bold: var(--fg);
+  --tw-prose-code: var(--fg);
+  --tw-prose-quotes: var(--fg);
+  --tw-prose-quote-borders: var(--line);
+  --tw-prose-hr: var(--line);
+  --tw-prose-bullets: var(--muted);
+  --tw-prose-counters: var(--muted);
+  --tw-prose-th-borders: var(--line);
+  --tw-prose-td-borders: var(--line);
+  --tw-prose-pre-bg: var(--card);
+  --tw-prose-pre-code: var(--soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -1,66 +1,64 @@
-import { useState } from 'react';
-import { FaTimes, FaLaptopCode } from 'react-icons/fa';
-import { NavLink } from 'react-router';
-import { HiBars3BottomRight } from 'react-icons/hi2';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router';
+import { motion, useScroll, useSpring } from 'motion/react';
+import { profile } from '~/data/profile';
 
-const navLinks = [
-  { to: '/', path: 'Home' },
-  { to: '/projects', path: 'Projects' },
-  { to: '/blog', path: 'Blog' },
-  { to: '/about', path: 'About' },
-  { to: '/contact', path: 'Contact' },
+const links = [
+  { to: '/#experience', label: 'Experience' },
+  { to: '/#projects', label: 'Projects' },
+  { to: '/blog', label: 'Blog' },
+  { to: '/contact', label: 'Contact' },
 ];
 
 const Navbar = () => {
-  const base = `transition hover:text-blue-400`;
-  const active = `text-blue-400 font-semibold`;
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const [scrolled, setScrolled] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <nav className="bg-gray-800 border-b border-gray-700 shadow-md sticky top-0 z-50 backdrop-blur-3xl h-[60px]">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <NavLink to="/" className={'flex items-center gap-2 text-lg font-bold text-blue-300'}>
-          <FaLaptopCode className="text-blue-400 text-xl" />
-          <span>The Friendly Developer</span>
-        </NavLink>
-
-        {/* desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
-          <div className="space-x-4 text-sm text-gray-300">
-            {navLinks.map(({ to, path }) => (
-              <NavLink key={to} className={({ isActive }) => (isActive ? active : base)} to={to}>
-                {path}
-              </NavLink>
-            ))}
-          </div>
-        </div>
-
-        {/* mobile navigation */}
-        <div className="flex items-center gap-4 md:hidden">
-          <button
-            className="text-blue-400 text-xl cursor-pointer"
-            title="Menu"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <FaTimes /> : <HiBars3BottomRight />}
-          </button>
-        </div>
-      </div>
-      {menuOpen && (
-        <div className="md:hidden bg-gray-800/90 border-t border-gray-700 px-6 py-4  flex flex-col gap-4 items-end text-left backdrop-blur-3xl absolute left-0 right-0  top-[60px] h-screen">
-          {navLinks.map(({ to, path }) => (
+    <header
+      className={`sticky top-0 z-40 transition-colors ${
+        scrolled ? 'bg-bg/80 backdrop-blur-md' : ''
+      }`}
+    >
+      <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 py-4 pl-6 pr-14 sm:pr-16">
+        <Link to="/" aria-label="Home" className="shrink-0">
+          <img
+            src={profile.avatar}
+            alt={profile.name}
+            className="h-9 w-9 rounded-full object-cover ring-1 ring-line"
+          />
+        </Link>
+        <nav className="flex items-center gap-3.5 text-sm text-muted sm:gap-5">
+          {links.map((l) => (
             <NavLink
-              key={to}
-              onClick={() => setMenuOpen(false)}
-              className={({ isActive }) => (isActive ? active : base)}
-              to={to}
+              key={l.to}
+              to={l.to}
+              className={() =>
+                `transition-colors hover:text-fg ${l.to === '/#experience' ? 'hidden sm:inline' : ''} ${
+                  !l.to.includes('#') && pathname.startsWith(l.to) ? 'text-fg' : ''
+                }`
+              }
             >
-              {path}
+              {l.label}
             </NavLink>
           ))}
-        </div>
-      )}
-    </nav>
+        </nav>
+      </div>
+      <motion.div
+        style={{ scaleX: progress }}
+        className="h-px origin-left bg-accent"
+        aria-hidden
+      />
+    </header>
   );
 };
 

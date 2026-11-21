@@ -10,6 +10,8 @@ import {
 import type { Route } from './+types/root';
 import './app.css';
 import Navbar from './components/navbar';
+import Footer from './components/footer';
+import ThemeToggle from './components/theme-toggle';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -20,24 +22,30 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+    href: 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300..800&display=swap',
   },
 ];
 
 
 
+// Runs before paint so the saved theme never flashes. Dark is the default.
+const themeScript = `try{var t=localStorage.getItem('theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){document.documentElement.dataset.theme='dark'}`;
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Meta />
         <Links />
       </head>
       <body>
+        <ThemeToggle />
         <Navbar />
-        <main>{children}</main>
+        <main className="mx-auto max-w-2xl px-6">{children}</main>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -64,7 +72,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="mx-auto max-w-2xl px-6 pt-24">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (

@@ -2,8 +2,6 @@ import { Form, useNavigation } from 'react-router';
 import type { Route } from '../contact/+types/index';
 import { Resend } from 'resend';
 
-const resend = new Resend(import.meta.env.VITE_API_RESEND);
-
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const name = formData.get('name');
@@ -24,6 +22,8 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   try {
+    // Created per request so a missing key only breaks the form, not the whole site.
+    const resend = new Resend(import.meta.env.VITE_API_RESEND);
     await resend.emails.send({
       from: `onboarding@resend.dev`,
       to: 'simonchikezie44@gmail.com',
@@ -63,84 +63,70 @@ export async function action({ request }: Route.ActionArgs) {
   //   message,
   // };
 }
+const field =
+  'mt-1.5 w-full rounded-lg border border-line bg-card px-3.5 py-2.5 text-sm text-fg placeholder:text-muted transition-colors focus:border-muted focus:outline-none';
+
 const ContactPage = ({ actionData }: Route.ComponentProps) => {
-  const navigation = useNavigation(); // 👈 get navigation state
+  const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
-  const errors = actionData?.errors;
+  const errors = actionData?.errors as Record<string, string> | undefined;
   return (
-    <section className="max-w-3xl mx-auto mt-12 px-6 py-8 bg-gray-900">
-      <h2 className="text-3xl font-bold text-white mb-8 text-center">📬 Contact Me</h2>
-      {actionData?.message ? (
-        <p className="mb-6 p-4 bg-green-700 text-green-100 text-center rounded-lg border border-green-500 shadow-sm">
+    <section>
+      <h1 className="text-3xl font-semibold tracking-tight">Get in touch</h1>
+      <p className="mt-2 text-muted">
+        Have a project, a question or just want to say hi? Send a message and I’ll get back to you.
+      </p>
+      {actionData && 'message' in actionData && actionData.message ? (
+        <p className="mt-6 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm text-fg">
           {actionData.message}
         </p>
       ) : null}
-      <Form method="post" className="space-y-6" key={actionData?.message}>
-        {/* Full Name */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-300">
-            Full Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            className="w-full mt-1 px-4 py-2 border border-gray-700 rounded-lg bg-gray-800 text-gray-100"
-          />
-          {errors?.name && <p className="text-red-400 text-sm mt-1">{errors?.name}</p>}
+      {errors?.general ? (
+        <p className="mt-6 rounded-lg border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-400">
+          {errors.general}
+        </p>
+      ) : null}
+      <Form
+        method="post"
+        className="mt-8 space-y-5"
+        key={actionData && 'message' in actionData ? actionData.message : 'form'}
+      >
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="name" className="label">
+              Full name
+            </label>
+            <input type="text" id="name" name="name" className={field} />
+            {errors?.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
+          </div>
+          <div>
+            <label htmlFor="email" className="label">
+              Email
+            </label>
+            <input type="email" id="email" name="email" className={field} />
+            {errors?.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
+          </div>
         </div>
-
-        {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-300">
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            className="w-full mt-1 px-4 py-2 border border-gray-700 rounded-lg bg-gray-800 text-gray-100"
-          />
-          {errors?.email && <p className="text-red-400 text-sm mt-1">{errors?.email}</p>}
-        </div>
-
-        {/* Subject */}
-        <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-gray-300">
+          <label htmlFor="subject" className="label">
             Subject
           </label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            className="w-full mt-1 px-4 py-2 border border-gray-700 rounded-lg bg-gray-800 text-gray-100"
-          />
-          {errors?.subject && <p className="text-red-400 text-sm mt-1">{errors?.subject}</p>}
+          <input type="text" id="subject" name="subject" className={field} />
+          {errors?.subject && <p className="mt-1 text-sm text-red-400">{errors.subject}</p>}
         </div>
-
-        {/* Message */}
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-300">
+          <label htmlFor="message" className="label">
             Message
           </label>
-          <textarea
-            id="message"
-            name="message"
-            rows={5}
-            className="w-full mt-1 px-4 py-2 border border-gray-700 rounded-lg bg-gray-800 text-gray-100"
-          />
-          {errors?.message && <p className="text-red-400 text-sm mt-1">{errors?.message}</p>}
+          <textarea id="message" name="message" rows={6} className={field} />
+          {errors?.message && <p className="mt-1 text-sm text-red-400">{errors.message}</p>}
         </div>
-
-        {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting} // 👈 disable while submitting
-          className={`w-full py-2 rounded-lg transition 
-            ${isSubmitting ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} 
-            text-white`}
+          disabled={isSubmitting}
+          className="rounded-lg bg-fg px-5 py-2.5 text-sm font-medium text-bg transition hover:opacity-85 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSubmitting ? 'Sending...' : 'Send Message'}
+          {isSubmitting ? 'Sending...' : 'Send message'}
         </button>
       </Form>
     </section>

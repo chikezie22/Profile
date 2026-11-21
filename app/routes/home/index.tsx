@@ -1,26 +1,38 @@
 import FeaturedProjects from '~/components/feature-project';
 import type { Route } from './+types/index';
 import type { Project, StrapiPost, StrapiProject, StrapiResponse } from '~/types';
-import AboutPreview from '~/components/about-preview';
+import { About, Stacks } from '~/components/about-preview';
+import Experience from '~/components/experience';
+import ContactCta from '~/components/contact-cta';
 import type { PostMeta } from '~/types';
 import LatestPosts from '~/components/latest-posts';
 
-export async function loader({
-  request,
-}: Route.LoaderArgs): Promise<{ projects: Project[]; posts: PostMeta[] }> {
-  // const url = new URL(request.url);
-  const [projectsRes, postsRes] = await Promise.all([
-    fetch(`${import.meta.env.VITE_API_URL}/projects?filters[featured][$eq]=true&populate=*`),
-    fetch(
-      `${import.meta.env.VITE_API_URL}/posts?sort[0]=date:desc&pagination[limit]=3&populate=image`
-    ),
-  ]);
+export async function loader(_: Route.LoaderArgs): Promise<{ projects: Project[]; posts: PostMeta[] }> {
+  // The page is mostly static, so a CMS outage shouldn't take the whole home page down.
+  try {
+    const [projectsRes, postsRes] = await Promise.all([
+      fetch(`${import.meta.env.VITE_API_URL}/projects?filters[featured][$eq]=true&populate=*`),
+      fetch(
+        `${import.meta.env.VITE_API_URL}/posts?sort[0]=date:desc&pagination[limit]=3&populate=image`
+      ),
+    ]);
 
-  if (!projectsRes.ok || !postsRes.ok) {
-    throw new Error('Failed to fetch Projects or Posts');
+    if (!projectsRes.ok || !postsRes.ok) {
+      throw new Error('Failed to fetch Projects or Posts');
+    }
+    const projectsJson: StrapiResponse<StrapiProject> = await projectsRes.json();
+    const postsJson: StrapiResponse<StrapiPost> = await postsRes.json();
+    return mapData(projectsJson, postsJson);
+  } catch (error) {
+    console.error(error);
+    return { projects: [], posts: [] };
   }
-  const projectsJson: StrapiResponse<StrapiProject> = await projectsRes.json();
-  const postsJson: StrapiResponse<StrapiPost> = await postsRes.json();
+}
+
+function mapData(
+  projectsJson: StrapiResponse<StrapiProject>,
+  postsJson: StrapiResponse<StrapiPost>
+): { projects: Project[]; posts: PostMeta[] } {
 
   const projects = projectsJson.data.map((item) => ({
     id: item.id,
@@ -35,6 +47,7 @@ export async function loader({
   }));
   const posts = postsJson.data.map((item) => ({
     id: item.id,
+    documentId: item.documentId,
     slug: item.slug,
     title: item.title,
     excerpt: item.excerpt,
@@ -49,9 +62,12 @@ const HomePage = ({ loaderData }: Route.ComponentProps) => {
   const { projects, posts } = loaderData;
   return (
     <>
+      <About />
+      <Stacks />
+      <Experience />
       <FeaturedProjects projects={projects} />
-      <AboutPreview />
       <LatestPosts posts={posts} />
+      <ContactCta />
     </>
   );
 };

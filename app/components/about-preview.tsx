@@ -1,25 +1,31 @@
-import { Link } from 'react-router';
+import { profile, stack } from '~/data/profile';
+import Section from './section';
 
-const AboutPreview = () => {
-  return (
-    <section className="mt-12 p-10 flex flex-col md:flex-row items-center gap-8 bg-gray-900">
-      <img
-        src="/images/photo-nysc.jpeg"
-        alt="profile"
-        className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-blue-500 shadow-md"
-      />
-      <div>
-        <h2 className="text-2xl font-bold text-white mb-2">👋 About Me</h2>
-        <p className="text-gray-300 mb-4 max-w-xl">
-          I’m Chike — a self-taught developer and educator passionate about building friendly
-          digital experiences and helping others grow into confident modern devs.
-        </p>
-        <Link to="/about" className="inline-block text-blue-400 hover:underline text-sm">
-          Learn more about me →
-        </Link>
-      </div>
-    </section>
-  );
-};
+export const About = () => (
+  <Section id="about" label="About me">
+    <div className="space-y-4 leading-relaxed text-soft">
+      {profile.bio.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
+    </div>
+    <p className="mt-6 font-serif text-4xl italic leading-none text-fg">{profile.firstName}</p>
+    <p className="mt-1 text-sm text-muted">{profile.name}</p>
+  </Section>
+);
 
-export default AboutPreview;
+export const Stacks = () => (
+  <Section id="stack" label="Stack">
+    <ul className="flex flex-wrap gap-2">
+      {stack.map((tech) => (
+        <li
+          key={tech}
+          className="rounded-md border border-line bg-card px-2.5 py-1 text-sm text-soft transition-colors hover:border-muted hover:text-fg"
+        >
+          {tech}
+        </li>
+      ))}
+    </ul>
+  </Section>
+);
+
+export default About;

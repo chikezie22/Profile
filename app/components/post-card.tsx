@@ -3,16 +3,22 @@ import type { PostMeta } from '~/types';
 
 const PostCard = ({ post }: { post: PostMeta }) => {
   return (
-    <article className="bg-gray-800 p-6 rounded-lg shadow mb-4">
-      <h3 className="text-2xl font-semibold text-blue-400">{post.title}</h3>
-      <p className="text-sm text-gray-400 mb-2">{new Date(post.date).toDateString()}</p>
-      {post.image && (
-        <img src={post.image} alt={post.title} className="w-full h-48 object-cover rounded mb-4" />
-      )}
-      <p className="text-gray-300 mb-4">{post.excerpt}</p>
-
-      <Link to={`/blog/${post.documentId}`} className="text-blue-300 hover:underline text-sm">
-        Read More →
+    <article className="group border-b border-line py-6 first:pt-0">
+      <Link to={`/blog/${post.documentId}`} className="block">
+        <time className="label">
+          {new Date(post.date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })}
+        </time>
+        <h3 className="mt-2 text-xl font-medium text-fg group-hover:underline group-hover:decoration-muted group-hover:underline-offset-4">
+          {post.title}
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted">{post.excerpt}</p>
+        <span className="mt-3 inline-block text-sm text-soft transition group-hover:translate-x-0.5">
+          Read more →
+        </span>
       </Link>
     </article>
   );

@@ -1,26 +1,66 @@
+import { motion } from 'motion/react';
+import { FiMail, FiMapPin } from 'react-icons/fi';
 import { Link } from 'react-router';
+import { profile } from '~/data/profile';
+
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 12, filter: 'blur(8px)' },
+  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+});
 
 const Hero = () => {
   return (
-    <header className="text-center py-20 px-4 bg-gray-900 text-white transition-colors duration-300">
-      <h2 className="text-4xl font-bold mb-4">Hi I'm Chike👋</h2>
-      <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-6">
-        I build friendly web experiences and help others become confident, and modern developers
-      </p>
-      <div className="flex justify-center gap-4">
-        <Link
-          to={'/projects'}
-          className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+    <header className="pb-6 pt-14 sm:pt-20">
+      {profile.openToWork && (
+        <motion.p
+          {...fade(0)}
+          className="label mb-5 flex items-center gap-2 text-soft"
         >
-          View Projects
-        </Link>
-        <Link
-          to={'/contact'}
-          className="border border-blue-600 text-blue-600 px-6 py-2 rounded-md hover:bg-blue-600 hover:text-white transition"
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+          </span>
+          Open to work
+        </motion.p>
+      )}
+
+      <motion.h1
+        {...fade(0.08)}
+        className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+      >
+        Hi, I’m{' '}
+        <img
+          src={profile.avatar}
+          alt=""
+          className="mx-1 inline-block h-9 w-9 -translate-y-0.5 rounded-full object-cover align-middle ring-1 ring-line sm:h-10 sm:w-10"
+        />{' '}
+        {profile.name}
+        <br />
+        <span className="text-soft">{profile.title}</span>
+      </motion.h1>
+
+      <motion.p {...fade(0.16)} className="mt-4 max-w-md leading-relaxed text-muted">
+        {profile.tagline}
+      </motion.p>
+
+      <motion.div {...fade(0.24)} className="mt-7 flex flex-wrap items-center gap-3">
+        <a
+          href={`mailto:${profile.email}`}
+          className="inline-flex items-center gap-2 rounded-lg bg-fg px-4 py-2.5 text-sm font-medium text-bg transition hover:opacity-85 active:scale-[0.98]"
         >
-          Contact
+          <FiMail size={15} /> Email me
+        </a>
+        <Link
+          to="/contact"
+          className="inline-flex items-center rounded-lg border border-line px-4 py-2.5 text-sm text-soft transition hover:border-muted hover:text-fg"
+        >
+          Send a message
         </Link>
-      </div>
+        <span className="ml-1 inline-flex items-center gap-1.5 text-sm text-muted">
+          <FiMapPin size={14} /> {profile.location}
+        </span>
+      </motion.div>
     </header>
   );
 };
